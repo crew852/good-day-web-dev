@@ -1,0 +1,14 @@
+github 제한으로 삭제조치한 파일들
+
+---
+
+pywrap_tensorflow_internal
+
+C:\Goodday\Ai\Lib\site-packages\tensorflow\python
+
+---
+
+dnnl.lib
+torch_cpu.dll
+
+C:\Goodday\Ai\Lib\site-packages\torch\lib

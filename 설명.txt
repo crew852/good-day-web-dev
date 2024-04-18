@@ -1,0 +1,23 @@
+flask 및 기타 패키지들을 모두 저장하기위해 venv 가상환경에 패키지들을 모두 저장해둠.
+따라서, 아래 절차에 따라 개발 및 실행해야 함.
+
+1. 가상환경 가동
+
+./Scripts/activate
+
+2. 개발 혹은 실행
+
+python ./app.py
+
+3. 가상환경 종료
+
+deactivate
+
+---
+
+설치 불가 라이브러리들
+
+random_state - 지원 중단에 따른 보안 이슈로 설치 불가
+load_metric - datasets라이브러리에 포함된 모듈임
+random, re, logging - 파이썬 기본 라이브러리임
+BaseModel - 패키지 메타데이터가 깨져서 다운로드 불가 & 패키지설명에도 불안정해서 곧 터진다고 함
