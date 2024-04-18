@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>C 코드 취약점 예측</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <!--나중에 사이드바 추가를 위해 미리 div 하나 더 감싸둠-->
+    <div class="flex flex-row">
+      <div
+        class="min-w-60 h-screen bg-blue-500 flex justify-center items-center"
+      >
+        (사이드바 예정)
+      </div>
+      <div class="flex flex-col w-full h-screen justify-between">
+        <header
+          class="h-14 shadow shadow-md w-full flex justify-between items-center px-10"
+        >
+          <a href="/" class="text-2xl font-bold">G'Day</a>
+          <div class="text-md font-bold text-gray-400 space-x-6">
+            <a>Web</a>
+            <a>Soft</a>
+          </div>
+        </header>
+
+        <div class="px-14 pb-8 justify-end flex flex-col">
+          {% if output_text %}
+          <h2>결과:</h2>
+          <p>{{ output_text }}</p>
+          <p>각 클래스에 대한 확률:</p>
+          <ul>
+            {% for probability in class_probabilities %}
+            <li>{{ loop.index0 }}: {{ probability }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+
+          <form
+            class="flex flex-row border-2 rounded-md border-gray-400 justify-between p-1 max-h-80 h-32"
+            action="/predict"
+            method="post"
+          >
+            <div class="flex flex-col">
+              <textarea
+                name="input_text"
+                rows="10"
+                cols="50"
+                placeholder="여기에 C 코드를 입력하세요..."
+              ></textarea>
+              <div>
+                <span>icon placeholder</span>
+              </div>
+            </div>
+            <div class="flex flex-col justify-between">
+              <button type="submit">예측</button>
+              <div>lang select</div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
