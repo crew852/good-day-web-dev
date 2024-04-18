@@ -38,25 +38,28 @@
           {% endif %}
 
           <form
-            class="flex flex-row border-2 rounded-md border-gray-400 justify-between p-1 max-h-80 h-32"
+            class="flex flex-col border-2 rounded-md border-gray-400 justify-between p-1 max-h-80 h-32"
             action="/predict"
             method="post"
           >
             <div class="flex flex-col">
               <textarea
+                class="h-14 max-h-80"
                 name="input_text"
                 rows="10"
                 cols="50"
                 placeholder="여기에 C 코드를 입력하세요..."
               ></textarea>
-              <div>
+              <div class="flex justify-between">
                 <span>icon placeholder</span>
+                <div class="flex flex-row">
+                  <select id="lang">
+                    <option value="c">C</option>
+                    <option value="cpp">CPP</option>
+                  </select>
+                  <button type="submit">예측</button>
+                </div>
               </div>
-            </div>
-            <div class="flex flex-col justify-between">
-              <button type="submit">예측</button>
-              <div>lang select</div>
-            </div>
           </form>
         </div>
       </div>
