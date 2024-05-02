@@ -6,7 +6,7 @@ import re
 app = Flask(__name__)
 
 # 모델과 토크나이저 로드
-model = AutoModelForSequenceClassification.from_pretrained("rlaaudrb1104/models", num_labels=10)
+model = AutoModelForSequenceClassification.from_pretrained("rlaaudrb1104/models", num_labels=11)
 tokenizer = AutoTokenizer.from_pretrained("microsoft/graphcodebert-base")
 
 def preprocess_and_tokenize_c_code(code_text, tokenizer):

@@ -1,0 +1,50 @@
+.sidebar {
+  width: 250px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  transition: width 0.5s;
+  overflow-x: hidden;
+}
+
+.main-content {
+  transition: margin-left 0.5s;
+  margin-left: 250px;
+}
+
+.toggle-btn {
+  position: fixed;
+  left: 250px;
+  top: 50%;
+  transition: left 0.5s;
+}
+
+.sidebar.collapsed {
+  width: 0;
+}
+
+.main-content.collapsed {
+  margin-left: 0;
+}
+
+.toggle-btn.collapsed {
+  left: 0;
+}
+
+.textarea-expand-upwards {
+  height: 56px;
+  min-height: 56px; /* 시작 높이 설정 */
+  max-height: 140px; /* 최대 높이 설정 */
+  overflow-y: hidden; /* 스크롤바 숨기기 */
+  resize: none; /* 사용자가 크기를 조절하지 못하도록 설정 */
+}
+
+/* textarea에 내용 입력 시 상하 크기 조절 */
+.textarea-expand-upwards:focus {
+  overflow-y: auto; /* 내용이 오버플로우 되면 스크롤바 활성화 */
+}
+
+.textarea-expand-upwards:focus {
+  outline: none;
+}

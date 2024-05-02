@@ -3,18 +3,28 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>C 코드 취약점 예측</title>
+    <title>좋은데이</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
   </head>
   <body>
     <!--나중에 사이드바 추가를 위해 미리 div 하나 더 감싸둠-->
     <div class="flex flex-row">
       <div
-        class="min-w-60 h-screen bg-blue-500 flex justify-center items-center"
+        id="sidebar"
+        class="sidebar h-screen bg-blue-500 flex justify-center items-center"
       >
-        (사이드바 예정)
+        <a>사이드바 예정</a>
+        <!-- 사이드바 닫기/열기 버튼 -->
+        <button id="toggleBtn" class="toggle-btn">😀</button>
       </div>
-      <div class="flex flex-col w-full h-screen justify-between">
+      <div
+        id="mainContent"
+        class="main-content flex flex-col w-full h-screen justify-between"
+      >
         <header
           class="h-14 shadow shadow-md w-full flex justify-between items-center px-10"
         >
@@ -38,20 +48,32 @@
           {% endif %}
 
           <form
-            class="flex flex-col border-2 rounded-md border-gray-400 justify-between p-1 max-h-80 h-32"
+            class="flex flex-col border-2 rounded-md border-gray-400 justify-between p-1 max-h-80"
             action="/predict"
             method="post"
           >
             <div class="flex flex-col">
               <textarea
-                class="h-14 max-h-80"
+                class="textarea-expand-upwards p-2"
                 name="input_text"
                 rows="10"
                 cols="50"
                 placeholder="여기에 C 코드를 입력하세요..."
+                id="codeInput"
               ></textarea>
               <div class="flex justify-between">
-                <span>icon placeholder</span>
+                <div id="leftside-btns" class="">
+                  <button type="button" id="addCodeBlock">코드블록 추가</button>
+
+                  <input
+                    type="file"
+                    id="fileUpload"
+                    name="fileUpload"
+                    accept=".txt, .c, .cpp"
+                    style="display: none"
+                  />
+                  <label for="fileUpload" class="button">파일 업로드</label>
+                </div>
                 <div class="flex flex-row">
                   <select id="lang">
                     <option value="c">C</option>
@@ -60,9 +82,29 @@
                   <button type="submit">예측</button>
                 </div>
               </div>
+            </div>
           </form>
+          <script>
+            document.addEventListener("DOMContentLoaded", function () {
+              var textarea = document.getElementById("codeInput")
+              var offset = textarea.offsetHeight - textarea.clientHeight
+
+              document.addEventListener(
+                "input",
+                function (event) {
+                  var target = event.target
+                  if (target.id === "codeInput") {
+                    target.style.height = "auto"
+                    target.style.height = target.scrollHeight + offset + "px"
+                  }
+                },
+                false
+              )
+            })
+          </script>
         </div>
       </div>
     </div>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
   </body>
 </html>
