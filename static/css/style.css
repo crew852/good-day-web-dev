@@ -45,6 +45,16 @@
   overflow-y: auto; /* 내용이 오버플로우 되면 스크롤바 활성화 */
 }
 
-.textarea-expand-upwards:focus {
+.textarea-expand-upwards:focus,
+select {
   outline: none;
+}
+
+form {
+  border-image: linear-gradient(
+    to right,
+    rgb(43, 198, 43) 0%,
+    rgb(29, 123, 255) 100%
+  );
+  border-image-slice: 1;
 }

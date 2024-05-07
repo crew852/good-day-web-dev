@@ -19,13 +19,3 @@ document
     }
     reader.readAsText(event.target.files[0])
   })
-document.getElementById("addCodeBlock").addEventListener("click", function () {
-  const codeInput = document.getElementById("codeInput")
-  const insertionText = "```\n(여기에 코드를 입력)\n```"
-  const cursorPositionStart = codeInput.value.length + 6
-  const cursorPositionEnd = cursorPositionStart + "여기에 코드를 입력".length
-
-  codeInput.value += insertionText
-  codeInput.focus()
-  codeInput.setSelectionRange(cursorPositionEnd, cursorPositionEnd)
-})
