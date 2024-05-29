@@ -6,7 +6,7 @@ import re
 app = Flask(__name__)
 
 # 모델과 토크나이저 로드
-model = AutoModelForSequenceClassification.from_pretrained("rlaaudrb1104/models", num_labels=11)
+model = AutoModelForSequenceClassification.from_pretrained("rlaaudrb1104/models", num_labels=10)
 tokenizer = AutoTokenizer.from_pretrained("microsoft/graphcodebert-base")
 
 def preprocess_and_tokenize_c_code(code_text, tokenizer):
@@ -61,6 +61,7 @@ def home():
 @app.route('/predict', methods=['POST'])
 def predict():
     input_text = request.form['input_text']
+    lang = request.form['lang']  # 추가된 부분
 
     # 입력 데이터 전처리 및 토큰화
     input_data = preprocess_and_tokenize_c_code(input_text, tokenizer)
@@ -68,7 +69,12 @@ def predict():
     # 모델 예측 결과
     class_probabilities, predicted_class_label_text = predict_with_model(input_data, model)
 
-    return render_template('index.html', input_text=input_text, output_text=predicted_class_label_text, class_probabilities=class_probabilities)
+    return render_template('index.html', 
+        input_text=input_text, 
+        output_text=predicted_class_label_text, 
+        class_probabilities=class_probabilities,
+        lang=lang)  # 언어도 전달
+
 
 if __name__ == '__main__':
     app.run(debug=True)

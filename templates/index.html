@@ -9,6 +9,29 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='css/style.css') }}"
     />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-okaidia.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      /* 특정 키워드 색상 변경 */
+      .language-c .token.keyword,
+      .language-cpp .token.keyword {
+        color: #ff628c !important;
+      }
+
+      /* 연산자 색상 변경 */
+      .language-c .token.operator,
+      .language-cpp .token.operator {
+        color: #ffd700 !important; /* 금색 */
+      }
+
+      /* 숫자 색상 변경 */
+      .language-c .token.number,
+      .language-cpp .token.number {
+        color: #9acd32 !important; /* 녹색 */
+      }
+    </style>
   </head>
   <body>
     <!--나중에 사이드바 추가를 위해 미리 div 하나 더 감싸둠-->
@@ -29,7 +52,7 @@
         class="main-content flex flex-col w-full h-screen justify-between"
       >
         <header
-          class="h-14 shadow shadow-md w-full flex justify-between items-center px-10"
+          class="h-14 min-h-14 shadow shadow-md w-full flex justify-between items-center px-10"
         >
           <a href="/" class="text-2xl font-bold">G'Day</a>
           <div class="text-md font-bold text-gray-400 space-x-6">
@@ -38,16 +61,36 @@
           </div>
         </header>
 
-        <div class="px-14 pb-8 justify-end flex flex-col">
+        <div class="px-14 pb-8 flex flex-col justify-between; height: 50%">
           {% if output_text %}
-          <h2>결과:</h2>
-          <p>{{ output_text }}</p>
-          <p>각 클래스에 대한 확률:</p>
-          <ul>
-            {% for probability in class_probabilities %}
-            <li>{{ loop.index0 }}: {{ probability }}</li>
-            {% endfor %}
-          </ul>
+          <div style="display: flex; justify-content: space-between">
+            <div style="width: 45%">
+              <p>Function entered</p>
+              {% if programming_language == 'c' %}
+              <!-- C 언어 코드 블록 -->
+              <pre><code class="language-c">
+{{ input_text }}</code></pre>
+              {% else %}
+              <!-- C++ 언어 코드 블록 -->
+              <pre><code class="language-cpp">
+{{ input_text }}</code></pre>
+              {% endif %}
+            </div>
+            <div style="width: 45%">
+              <p>Modified function</p>
+              <!-- 분석 결과 코드 블록 -->
+              <pre>
+                <code class="language-none">
+{{ output_text }}</code>
+                <p>각 클래스에 대한 확률:</p>
+                <ul>
+{% for probability in class_probabilities %}{{ loop.index0 }}: {{ probability }}
+{% endfor %}
+                </ul>
+              </pre>
+            </div>
+          </div>
+
           {% endif %}
 
           <form
@@ -95,7 +138,7 @@
                   /></label>
                 </div>
                 <div class="flex flex-row">
-                  <select id="lang" class="font-bold">
+                  <select name="lang" id="lang" class="font-bold">
                     <option value="c">C</option>
                     <option value="cpp">CPP</option>
                   </select>
@@ -107,5 +150,6 @@
       </div>
     </div>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
   </body>
 </html>

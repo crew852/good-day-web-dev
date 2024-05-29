@@ -1,3 +1,7 @@
+.no-transition {
+  transition: none !important;
+}
+
 .sidebar {
   width: 250px;
   position: fixed;
@@ -58,3 +62,5 @@ form {
   );
   border-image-slice: 1;
 }
+
+
