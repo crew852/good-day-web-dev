@@ -63,4 +63,10 @@ form {
   border-image-slice: 1;
 }
 
+body {
+  -ms-overflow-style: none;
+}
 
+::-webkit-scrollbar {
+  display: none;
+}

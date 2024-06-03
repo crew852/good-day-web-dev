@@ -10,30 +10,12 @@
       href="{{ url_for('static', filename='css/style.css') }}"
     />
     <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-okaidia.min.css"
       rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/atom-one-dark.min.css"
     />
-    <style>
-      /* 특정 키워드 색상 변경 */
-      .language-c .token.keyword,
-      .language-cpp .token.keyword {
-        color: #ff628c !important;
-      }
-
-      /* 연산자 색상 변경 */
-      .language-c .token.operator,
-      .language-cpp .token.operator {
-        color: #ffd700 !important; /* 금색 */
-      }
-
-      /* 숫자 색상 변경 */
-      .language-c .token.number,
-      .language-cpp .token.number {
-        color: #9acd32 !important; /* 녹색 */
-      }
-    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
   </head>
-  <body>
+  <body class="overflow-y-hidden">
     <!--나중에 사이드바 추가를 위해 미리 div 하나 더 감싸둠-->
     <div class="flex flex-row">
       <div
@@ -61,25 +43,26 @@
           </div>
         </header>
 
-        <div class="px-14 pb-8 flex flex-col justify-between; height: 50%">
-          {% if output_text %}
-          <div style="display: flex; justify-content: space-between">
-            <div style="width: 45%">
-              <p>Function entered</p>
-              {% if programming_language == 'c' %}
-              <!-- C 언어 코드 블록 -->
-              <pre><code class="language-c">
+        <div class="px-14 pb-8 flex flex-col justify-between;">
+          <div class="overflow-y-auto h-3/4 px-10 py-2">
+            {% if output_text %}
+            <div class="flex justify-between">
+              <div style="width: 45%">
+                <p class="text-lg font-bold">Function entered</p>
+                {% if programming_language == 'c' %}
+                <!-- C 언어 코드 블록 -->
+                <pre><code class="language-c">
 {{ input_text }}</code></pre>
-              {% else %}
-              <!-- C++ 언어 코드 블록 -->
-              <pre><code class="language-cpp">
+                {% else %}
+                <!-- C++ 언어 코드 블록 -->
+                <pre><code class="language-cpp">
 {{ input_text }}</code></pre>
-              {% endif %}
-            </div>
-            <div style="width: 45%">
-              <p>Modified function</p>
-              <!-- 분석 결과 코드 블록 -->
-              <pre>
+                {% endif %}
+              </div>
+              <div style="width: 45%">
+                <p class="text-lg font-bold">Modified function</p>
+                <!-- 분석 결과 코드 블록 -->
+                <pre>
                 <code class="language-none">
 {{ output_text }}</code>
                 <p>각 클래스에 대한 확률:</p>
@@ -88,10 +71,11 @@
 {% endfor %}
                 </ul>
               </pre>
+              </div>
             </div>
-          </div>
 
-          {% endif %}
+            {% endif %}
+          </div>
 
           <form
             class="flex flex-col border-4 justify-between px-4 pt-1 pb-2 max-h-80"
@@ -150,6 +134,8 @@
       </div>
     </div>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
+    <script>
+      hljs.highlightAll()
+    </script>
   </body>
 </html>
