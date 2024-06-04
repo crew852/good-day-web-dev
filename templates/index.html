@@ -46,35 +46,40 @@
         <div class="px-14 pb-8 flex flex-col justify-between;">
           <div class="overflow-y-auto h-3/4 px-10 py-2">
             {% if output_text %}
-            <div class="flex justify-between">
+            <div class="flex justify-between flex-row">
               <div style="width: 45%">
                 <p class="text-lg font-bold">Function entered</p>
                 {% if programming_language == 'c' %}
                 <!-- C 언어 코드 블록 -->
-                <pre><code class="language-c">
-{{ input_text }}</code></pre>
+                <pre><code class="language-c rounded-lg">{{ input_text }}</code></pre>
                 {% else %}
                 <!-- C++ 언어 코드 블록 -->
-                <pre><code class="language-cpp">
-{{ input_text }}</code></pre>
+                <pre><code class="language-cpp rounded-lg">{{ input_text }}</code></pre>
                 {% endif %}
               </div>
+              <div class="updown h-3/2"></div>
               <div style="width: 45%">
                 <p class="text-lg font-bold">Modified function</p>
-                <!-- 분석 결과 코드 블록 -->
-                <pre>
-                <code class="language-none">
-{{ output_text }}</code>
-                <p>각 클래스에 대한 확률:</p>
-                <ul>
+                {% if programming_language == 'c' %}
+                <pre><code class="language-c rounded-lg">{{ output_text }}
+<p>각 클래스에 대한 확률:</p>
+                    <ul>
 {% for probability in class_probabilities %}{{ loop.index0 }}: {{ probability }}
 {% endfor %}
-                </ul>
-              </pre>
+                    </ul>
+                  </code>
+                </pre>
+                {% else %}
+                <pre><code class="language-cpp rounded-lg">{{ output_text }}
+<p>각 클래스에 대한 확률:</p>
+                                      <ul>
+{% for probability in class_probabilities %}{{ loop.index0 }}: {{ probability }}
+{% endfor %}</ul>
+                                    </code>
+                                  </pre>
               </div>
             </div>
-
-            {% endif %}
+            {% endif %} {% endif %}
           </div>
 
           <form
