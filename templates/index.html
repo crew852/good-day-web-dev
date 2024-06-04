@@ -43,7 +43,7 @@
           </div>
         </header>
 
-        <div class="px-14 pb-8 flex flex-col justify-between;">
+        <div class="px-14 pb-8 flex flex-col justify-between h-screen;">
           <div class="overflow-y-auto h-3/4 px-10 py-2">
             {% if output_text %}
             <div class="flex justify-between flex-row">
@@ -57,7 +57,7 @@
                 <pre><code class="language-cpp rounded-lg">{{ input_text }}</code></pre>
                 {% endif %}
               </div>
-              <div class="updown h-3/2"></div>
+              <div class="updown"></div>
               <div style="width: 45%">
                 <p class="text-lg font-bold">Modified function</p>
                 {% if programming_language == 'c' %}
