@@ -37,5 +37,3 @@ document
     }
     reader.readAsText(event.target.files[0])
   })
-
-Prism.highlightAll()

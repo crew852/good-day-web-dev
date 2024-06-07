@@ -11,9 +11,24 @@ tokenizer = AutoTokenizer.from_pretrained("microsoft/graphcodebert-base")
 
 def preprocess_and_tokenize_c_code(code_text, tokenizer):
     # 주석 제거
-    code_text = re.sub(r'//.*?\n|/\*.*?\*/', '', code_text, flags=re.DOTALL)
-    code_text = re.sub(r'^#include\s+<.*?>\s*\n', '', code_text, flags=re.MULTILINE)
+    code_text = re.sub(r'//.*?\n', '', code_text, flags=re.DOTALL)
+    code_text = re.sub(r'/\*.*?\*/', '', code_text, flags=re.MULTILINE)
     code_text = re.sub(r'^#define\s+<.*?>\s*\n', '', code_text, flags=re.MULTILINE)
+    code_text = re.sub(r'#include .*?\n', '', code_text, flags=re.DOTALL)
+    code_text = re.sub(r'#include "*.*?\n', '', code_text, flags=re.DOTALL)
+    code_text = re.sub(r'#define .*?\n', '', code_text, flags=re.DOTALL)
+    code_text = re.sub(r'#undef\s+\w+', '', code_text, flags=re.DOTALL)
+    code_text = re.sub(r'#if\s+\w+', '', code_text, flags=re.DOTALL)
+    code_text = re.sub(r'#else\s+\w+', '', code_text, flags=re.DOTALL)
+    code_text = re.sub(r'#elif\s+\w+', '', code_text, flags=re.DOTALL)
+    code_text = re.sub(r'#endif', '', code_text, flags=re.DOTALL)
+    code_text = re.sub(r'[\t ]+', '', code_text, flags=re.DOTALL)
+    code_text = re.sub(r'\n\s*\n', '', code_text, flags=re.DOTALL)
+    code_text = re.sub(r'\n', '', code_text, flags=re.DOTALL)
+    code_text = re.sub(r'return*.*?;', '', code_text, flags=re.DOTALL)
+    code_text = re.sub(r'return;', '', code_text, flags=re.DOTALL)
+    code_text = re.sub(r'\b([a-zA-Z_]\w*)\s+([a-zA-Z_]\w*)\s*\(([^)]*)\)\s*{', r"void func(\3){", code_text, flags=re.DOTALL)
+
     # 코드 내의 공백 및 줄 바꿈 제거
     code_text = re.sub(r'\s+', ' ', code_text)
     # 토큰화
@@ -38,16 +53,15 @@ def predict_with_model(input_data, model):
     # 예측 클래스에 따른 설명
     predicted_class_label = {
         0: "안전한 코드입니다.",
-        1: "CWE-20 취약점\nImproper Input Validation",
-        2: "CWE-119 취약점\nImproper Restriction of Operations within the Bounds of a Memory Buffer",
-        3: "CWE-78 취약점\nOS Command Injection",
-        4: "CWE-122 취약점\nHeap-based Buffer Overflow",
-        5: "CWE-121 취약점\nStack-based Buffer Overflow",
-        6: "CWE-415 취약점\nDouble Free",
-        7: "CWE-399 취약점\nResource Management Errors",
-        8: "CWE-190 취약점\nInteger Overflow or Wraparound",
-        9: "CWE-125 취약점\nOut-of-bounds Read",
-        10: "CWE-416 취약점\nUse After Free"
+        1: "CWE-119 취약점\nImproper Restriction of Operations within the Bounds of a Memory Buffer",
+        2: "CWE-20 취약점\nImproper Input Validation",
+        3: "CWE-125 취약점\nOut-of-bounds Read",
+        4: "CWE-787 취약점\nOut-of-bounds Write",
+        5: "CWE-415 취약점\nDouble Free",
+        6: "CWE-399 취약점\nResource Management Errors",
+        7: "CWE-416 취약점\nUse after Free",
+        8: "CWE-476 취약점\nNULL Pointer Dereference",
+        9: "CWE-190 취약점\nInteger Overflow or Wraparound"
     }
 
     predicted_class_label_text = predicted_class_label[predicted_class.item()]
@@ -61,6 +75,7 @@ def home():
 @app.route('/predict', methods=['POST'])
 def predict():
     input_text = request.form['input_text']
+    lang = request.form['lang']  # 추가된 부분
 
     # 입력 데이터 전처리 및 토큰화
     input_data = preprocess_and_tokenize_c_code(input_text, tokenizer)
@@ -68,7 +83,12 @@ def predict():
     # 모델 예측 결과
     class_probabilities, predicted_class_label_text = predict_with_model(input_data, model)
 
-    return render_template('index.html', input_text=input_text, output_text=predicted_class_label_text, class_probabilities=class_probabilities)
+    return render_template('index.html', 
+        input_text=input_text, 
+        output_text=predicted_class_label_text, 
+        class_probabilities=class_probabilities,
+        lang=lang)  # 언어도 전달
+
 
 if __name__ == '__main__':
     app.run(debug=True)

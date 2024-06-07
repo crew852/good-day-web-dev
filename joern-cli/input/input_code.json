@@ -1,0 +1,20 @@
+{
+  "$type": "io.joern.dataflowengineoss.slicing.package.DataFlowSlice",
+  "edges": [],
+  "nodes": [
+    {
+      "code": "\"Hello world!\\n\"",
+      "columnNumber": [
+        9
+      ],
+      "id": 12,
+      "label": "LITERAL",
+      "lineNumber": [
+        3
+      ],
+      "parentFile": "input_code.c",
+      "parentMethod": "main",
+      "typeFullName": "char"
+    }
+  ]
+}

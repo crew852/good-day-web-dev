@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>좋은데이</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/atom-one-dark.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
+  </head>
+  <body class="overflow-y-hidden">
+    <div class="flex flex-row">
+      <div
+        id="sidebar"
+        class="sidebar h-screen bg-gray-700 flex flex-col justify-start items-start pt-4"
+      >
+        <h2 class="text-white ml-4 text-lg font-bold">HISTORY</h2>
+        <button
+          id="toggleBtn"
+          class="toggle-btn bg-gray-400 py-4 px-1 rounded-lg m-1"
+        ></button>
+        <div class="history w-full">
+          <ul class="space-y-2">
+            {% for record in history %}
+            <li class="text-white mt-4">
+              <a class="mx-4 my-1" href="/history/{{ record[0] }}">{{ record[1] }}{{ record[0] }}</a>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      <div
+        id="mainContent"
+        class="main-content flex flex-col w-full h-screen justify-start"
+      >
+        <header
+          class="h-14 min-h-14 shadow shadow-md w-full flex justify-between items-center px-10"
+        >
+          <a href="/" class="text-2xl font-bold">G'Day</a>
+          <div class="text-md font-bold text-gray-400 space-x-6">
+            <a>Web</a>
+            <a>Soft</a>
+          </div>
+        </header>
+
+        <div class="px-14 pb-8 flex flex-col justify-start h-full">
+          <div class="overflow-y-auto h-full px-10 py-2">
+            {% if output_text %}
+            <div class="flex justify-between flex-row">
+              <div style="width: 45%">
+                <p class="text-lg font-bold">Function entered</p>
+                {% if lang == 'c' %}
+                <!-- C 언어 코드 블록 -->
+                <pre
+                  class="code-block"
+                ><code class="language-c">{{ input_text }}</code></pre>
+                {% else %}
+                <!-- C++ 언어 코드 블록 -->
+                <pre
+                  class="code-block"
+                ><code class="language-cpp">{{ input_text }}</code></pre>
+                {% endif %}
+              </div>
+              <div class="updown"></div>
+              <div style="width: 45%">
+                <p class="text-lg font-bold">Modified function</p>
+                <div class="flex flex-col">
+                  {% if lang == 'c' %}
+                  <pre
+                    class="code-block"
+                  ><code class="language-c">{{ output_text }}</code></pre>
+                  <p class="text-lg font-bold mt-2">각 클래스에 대한 확률:</p>
+                  <ul class="code-block">
+                    {% for probability in class_probabilities %}
+                    <li>{{ loop.index0 }}: {{ probability }}</li>
+                    {% endfor %}
+                  </ul>
+                  {% else %}
+                  <pre
+                    class="code-block"
+                  ><code class="language-cpp">{{ output_text }}</code></pre>
+                  <p class="text-lg font-bold mt-2">각 클래스에 대한 확률:</p>
+                  <ul class="code-block">
+                    {% for probability in class_probabilities %}
+                    <li>{{ loop.index0 }}: {{ probability }}</li>
+                    {% endfor %}
+                  </ul>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            {% endif %}
+          </div>
+
+          <form
+            class="flex flex-col border-4 justify-between px-4 pt-1 pb-2 max-h-80"
+            action="/joern"
+            method="post"
+          >
+            <div class="flex flex-col">
+              <div class="flex flex-row items-center">
+                <textarea
+                  id="codeInput"
+                  name="input_text"
+                  tabindex="0"
+                  data-id="root"
+                  dir="auto"
+                  rows="1"
+                  placeholder="Input your function here"
+                  class="textarea-expand-upwards m-0 mb-1 w-full resize-none border-0 bg-transparent focus:ring-0 focus-visible:ring-0 dark:bg-transparent py-[10px] pr-10 md:py-3.5 md:pr-12 max-h-[25dvh] max-h-52 placeholder-black/50 dark:placeholder-white/50 pl-1"
+                  style="height: 44px; overflow-y: hidden"
+                  onKeyup="this.style.height = 'auto'; var m=50; var s=this.scrollHeight; if(s >= m) this.style.height = s + 'px';"
+                ></textarea>
+                <button
+                  type="submit"
+                  class="w-8 h-8 rounded-md hover:bg-gray-600 hover:shadow-md"
+                >
+                  <img
+                    class="w-8 h-8"
+                    src="{{ url_for('static', filename='img/enter.png') }}"
+                  />
+                </button>
+              </div>
+              <div class="flex justify-between">
+                <div id="leftside-btns" class="">
+                  <input
+                    type="file"
+                    id="fileUpload"
+                    name="fileUpload"
+                    accept=".txt, .c, .cpp"
+                    style="display: none"
+                  />
+                  <label for="fileUpload" class="button"
+                    ><img
+                      src="{{ url_for('static', filename='img/upload.png') }}"
+                      class="h-8 hover:cursor-pointer hover:shadow-lg"
+                  /></label>
+                </div>
+                <div class="flex flex-row">
+                  <select name="lang" id="lang" class="font-bold">
+                    <option value="c">C</option>
+                    <option value="cpp">CPP</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+      function toggleSidebar() {
+        var sidebar = document.getElementById('sidebar')
+        var mainContent = document.getElementById('mainContent')
+        var toggleBtn = document.getElementById('toggleBtn')
+
+        sidebar.classList.toggle('collapsed')
+        mainContent.classList.toggle('collapsed')
+        toggleBtn.classList.toggle('collapsed')
+      }
+      hljs.highlightAll()
+    </script>
+  </body>
+</html>

@@ -16,22 +16,33 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
   </head>
   <body class="overflow-y-hidden">
-    <!--나중에 사이드바 추가를 위해 미리 div 하나 더 감싸둠-->
     <div class="flex flex-row">
       <div
         id="sidebar"
-        class="sidebar h-screen bg-gray-700 flex justify-center items-center"
+        class="sidebar h-screen bg-gray-700 flex flex-col justify-start items-start pt-4"
       >
-        <a class="text-white">사이드바 예정</a>
-        <!-- 사이드바 닫기/열기 버튼 -->
+        <h2 class="text-white ml-4 text-lg font-bold">HISTORY</h2>
         <button
           id="toggleBtn"
           class="toggle-btn bg-gray-400 py-4 px-1 rounded-lg m-1"
         ></button>
+        <div class="history w-full">
+          <ul class="space-y-4">
+            {% for record in history %}
+            <li class="text-white mt-4 flex justify-between mr-4">
+              <a class="mx-4" href="/history/{{ record[0] }}">{{ record[1] }}{{ record[0] }}</a>
+              <div class="flex flex-row items-center">
+                <button><img class="w-4 mx-1" src="{{ url_for('static', filename='img/edit.png') }}" /></button>
+                <button><img class="w-4 mx-1" src="{{ url_for('static', filename='img/delete.png') }}" /></button>
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
       </div>
       <div
         id="mainContent"
-        class="main-content flex flex-col w-full h-screen justify-between"
+        class="main-content flex flex-col w-full h-screen justify-start"
       >
         <header
           class="h-14 min-h-14 shadow shadow-md w-full flex justify-between items-center px-10"
@@ -43,48 +54,64 @@
           </div>
         </header>
 
-        <div class="px-14 pb-8 flex flex-col justify-between h-screen;">
-          <div class="overflow-y-auto h-3/4 px-10 py-2">
+        <div class="px-14 pb-8 flex flex-col justify-start h-full">
+          <div class="overflow-y-auto h-full px-10 py-2">
             {% if output_text %}
             <div class="flex justify-between flex-row">
               <div style="width: 45%">
                 <p class="text-lg font-bold">Function entered</p>
-                {% if programming_language == 'c' %}
+                {% if lang == 'c' %}
                 <!-- C 언어 코드 블록 -->
-                <pre><code class="language-c rounded-lg">{{ input_text }}</code></pre>
+                <pre
+                  class="code-block"
+                ><code class="language-c rounded-lg">{{ input_text }}</code></pre>
                 {% else %}
                 <!-- C++ 언어 코드 블록 -->
-                <pre><code class="language-cpp rounded-lg">{{ input_text }}</code></pre>
+                <pre
+                  class="code-block"
+                ><code class="language-cpp rounded-lg">{{ input_text }}</code></pre>
                 {% endif %}
               </div>
               <div class="updown"></div>
               <div style="width: 45%">
                 <p class="text-lg font-bold">Modified function</p>
-                {% if programming_language == 'c' %}
-                <pre><code class="language-c rounded-lg">{{ output_text }}
-<p>각 클래스에 대한 확률:</p>
-                    <ul>
-{% for probability in class_probabilities %}{{ loop.index0 }}: {{ probability }}
-{% endfor %}
-                    </ul>
-                  </code>
-                </pre>
-                {% else %}
-                <pre><code class="language-cpp rounded-lg">{{ output_text }}
-<p>각 클래스에 대한 확률:</p>
-                                      <ul>
-{% for probability in class_probabilities %}{{ loop.index0 }}: {{ probability }}
-{% endfor %}</ul>
-                                    </code>
-                                  </pre>
+                <div class="flex flex-col">
+                  {% if lang == 'c' %}
+                  <pre
+                    class="code-block"
+                  ><code class="language-c rounded-lg">{{ output_text }}</code></pre>
+                  <p class="text-lg font-bold mt-2">각 클래스에 대한 확률:</p>
+                  <ul class="code-block">
+                    {% for probability in class_probabilities %}
+                    <li>{{ loop.index0 }}: {{ probability }}</li>
+                    {% endfor %}
+                  </ul>
+                  {% else %}
+                  <pre
+                    class="code-block"
+                  >
+                    <code class="language-cpp rounded-lg">
+                      {{ output_text }}
+                      <p class="text-lg font-bold mt-2">각 클래스에 대한 확률:</p>
+                      <ul class="code-block">
+                        {% for probability in class_probabilities %}
+                        <li>{{ loop.index0 }}: {{ probability }}</li>
+                        {% endfor %}
+                      </ul>
+                    </code>
+                    {% endif %}
+                  </pre>
+                  
+                  
+                </div>
               </div>
             </div>
-            {% endif %} {% endif %}
+            {% endif %}
           </div>
 
           <form
             class="flex flex-col border-4 justify-between px-4 pt-1 pb-2 max-h-80"
-            action="/predict"
+            action="/joern"
             method="post"
           >
             <div class="flex flex-col">
@@ -140,6 +167,15 @@
     </div>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
     <script>
+      function toggleSidebar() {
+        var sidebar = document.getElementById('sidebar')
+        var mainContent = document.getElementById('mainContent')
+        var toggleBtn = document.getElementById('toggleBtn')
+
+        sidebar.classList.toggle('collapsed')
+        mainContent.classList.toggle('collapsed')
+        toggleBtn.classList.toggle('collapsed')
+      }
       hljs.highlightAll()
     </script>
   </body>
